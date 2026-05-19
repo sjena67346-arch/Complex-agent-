@@ -1,0 +1,26 @@
+# API Keys
+.env
+.env.local
+*.key
+*.pem
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build
+node_modules/
+dist/
+build/
+
+# Logs
+*.log
+*.logs
+
+# Cache
+.cache/
+.tmp/

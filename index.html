@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complex AI Agent - Powered by Gemini API</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <span>Complex AI</span>
+                </div>
+                <button class="new-chat-btn" id="newChatBtn">
+                    <i class="fas fa-plus"></i> New Chat
+                </button>
+            </div>
+
+            <div class="history-section">
+                <div class="history-header">
+                    <h3>History</h3>
+                    <button class="clear-history-btn" id="clearHistoryBtn" title="Clear all history">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <!-- Chat history items will be added here -->
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="settings-btn" id="settingsBtn">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+                <button class="theme-btn" id="themeBtn">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-title">
+                    <h1>Complex AI Agent</h1>
+                    <p>Powered by Google Gemini API</p>
+                </div>
+                <div class="api-status">
+                    <span class="status-indicator" id="apiStatus"></span>
+                    <span id="statusText">Ready</span>
+                </div>
+            </header>
+
+            <!-- Chat Container -->
+            <div class="chat-container">
+                <div class="messages-area" id="messagesArea">
+                    <!-- Welcome message -->
+                    <div class="message welcome-message">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <h2>Welcome to Complex AI Agent</h2>
+                            <p>I'm your advanced AI assistant powered by Google Gemini. I can help you with:</p>
+                            <ul>
+                                <li><strong>Questions & Answers:</strong> Ask me anything and get detailed answers</li>
+                                <li><strong>Code Generation:</strong> Write, debug, and optimize code</li>
+                                <li><strong>Image Analysis:</strong> Upload images for analysis and description</li>
+                                <li><strong>Creative Writing:</strong> Help with stories, essays, and content</li>
+                                <li><strong>Data Analysis:</strong> Process and analyze information</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Section -->
+                <div class="input-section">
+                    <form class="input-form" id="inputForm">
+                        <div class="input-wrapper">
+                            <div class="input-tools">
+                                <button type="button" class="tool-btn" id="imageUploadBtn" title="Upload image">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                                <button type="button" class="tool-btn" id="codeBtn" title="Insert code">
+                                    <i class="fas fa-code"></i>
+                                </button>
+                            </div>
+                            <input 
+                                type="text" 
+                                class="message-input" 
+                                id="messageInput" 
+                                placeholder="Message Complex AI Agent..."
+                                autocomplete="off"
+                            >
+                            <button type="submit" class="send-btn" id="sendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="image-preview" id="imagePreview" style="display: none;">
+                        <img id="previewImage" alt="Preview">
+                        <button type="button" class="remove-image-btn" id="removeImageBtn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-btn" id="closeSettingsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label for="apiKeyInput">Gemini API Key:</label>
+                    <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API key">
+                    <small>Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a></small>
+                </div>
+                <div class="setting-item">
+                    <label for="modelSelect">Model:</label>
+                    <select id="modelSelect">
+                        <option value="gemini-pro">Gemini Pro</option>
+                        <option value="gemini-pro-vision">Gemini Pro Vision</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="temperatureSlider">Temperature (Creativity):</label>
+                    <input type="range" id="temperatureSlider" min="0" max="1" step="0.1" value="0.7">
+                    <span id="temperatureValue">0.7</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="savSettingsBtn">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Modal -->
+    <div class="modal" id="codeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Insert Code</h2>
+                <button class="close-btn" id="closeCodeBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="codeInput" placeholder="Paste your code here..." rows="10"></textarea>
+                <select id="languageSelect">
+                    <option value="">Select language...</option>
+                    <option value="python">Python</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="java">Java</option>
+                    <option value="cpp">C++</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelCodeBtn">Cancel</button>
+                <button class="btn btn-primary" id="insertCodeBtn">Insert Code</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="storage.js"></script>
+    <script src="api.js"></script>
+    <script src="ui.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
